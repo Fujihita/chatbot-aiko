@@ -1,0 +1,57 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/server.js",
+            "stopOnEntry": false,
+            "args": [],
+            "cwd": "${workspaceRoot}",
+            "preLaunchTask": null,
+            "runtimeExecutable": null,
+            "runtimeArgs": [
+                "--nolazy"
+            ],
+            "env": {
+                "NODE_ENV": "development",
+                "BOT_NAME": "Sasaki Aiko",
+                "CHAT_ROOM_ID": "{get your own room ID}",
+                "CHAT_SERVER_ID": "{get your own wiki server ID}",
+                "CHAT_KEY": "Chat::cookies::{hash string chat cookie}",
+                "CHAT_HOST": "chat.wikia-services.com",
+                "LUIS_MODEL_API": "{luis app model API key}",
+                "MICROSOFT_APP_ID": "{MS Bot framework app id}",
+                "MICROSOFT_APP_PASSWORD" : "{MS Bot framework app secret}",
+                "BOT_FRAMEWORK_DIRECT_API_PASSWORD": "{MS Bot framework direct API key}",
+                "BOT_FRAMEWORK_DIRECT_API_CONVERSATIONID": "{MS Bot framework conversation ID}",
+                "TEXT_ANALYTICS_API_KEY": "{MS Text Analytics API key}"
+            },
+            "console": "internalConsole",
+            "sourceMaps": false,
+            "outDir": null
+        },
+        {
+            "name": "Attach",
+            "type": "node",
+            "request": "attach",
+            "port": 5858,
+            "address": "localhost",
+            "restart": false,
+            "sourceMaps": false,
+            "outDir": null,
+            "localRoot": "${workspaceRoot}",
+            "remoteRoot": null
+        },
+        {
+            "name": "Attach to Process",
+            "type": "node",
+            "request": "attach",
+            "processId": "${command.PickProcess}",
+            "port": 5858,
+            "sourceMaps": false,
+            "outDir": null
+        }
+    ]
+}

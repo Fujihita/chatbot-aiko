@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="DataLogger">
+
+<head>
+    <title>Chat logs</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="resources/KC3_Icon_32x32.png" />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js'></script>
+    <script src="/scripts/data-logger.js"></script>
+</head>
+
+<div ng-include="'/partials/header.html'"></div>
+
+<body style="margin-bottom:60px;">
+    <div class="container-fluid">
+        <div class="row">
+            <div ng-controller="DataLoggerCtrl">
+                <div class="col-sm-4">
+                    <h2>About:Aiko<br><small>a server-side chat bot by Fujihita</small></h2>
+                    <p>This is a chat logger bot written in Nodejs and hosted on Azure cloud for Kantai Collection English Wikia
+                        chat room. The bot accesses Wikia's Special:Chat controller via socket.io interface directly.</p>
+                    <ul>
+                        <li>To stop the bot, visit /api/stop
+                        </li>
+                        <li>To start the bot again, visit /api/start</li>
+                        <li>To check the bot's status, visit /api/status</li>
+                    </ul>
+                    <p>Currently, there is no database or external log and due to the nature of Azure free cloud hosting, all
+                        chat logs are not permanent. They'll be reset every 29 hours or 24 minutes without activities.</p>
+                    <p>Perhaps, this is for the best...</p>
+                </div>
+                <div class="col-sm-8" style="height:420px;overflow:auto;">
+                    <div class="panel panel-default" style="margin:5px;" ng-repeat="items in data | orderBy : 'timeStamp'">
+                        <div class="panel-body">
+                            <div class="col-sm-2">
+                                <img class="img-responsive img-circle" src={{items.avatar}}></img>
+                            </div>
+                            <div class="col-sm-10">
+                                <p>
+                                    <h4 style=" overflow-wrap: break-word; word-wrap: break-word;">{{items.text}}</h4>
+                                </p>
+                                <h5>{{items.timeStamp}} by <b><a href="http://kancolle.wikia.com/wiki/User:{{items.name}}">{{items.name}}</a></b></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
