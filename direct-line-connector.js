@@ -13,7 +13,7 @@ var DirectLineConnector = {
         'Authorization': 'BotConnector ' + (process.env.BOT_FRAMEWORK_DIRECT_API_PASSWORD),
       }
     };
-    var post = https.request(options, function (res) { console.log(res) })
+    var post = https.request(options, function (res) { })
     post.end();
   },
   send: function (user, text) {
@@ -51,7 +51,7 @@ var DirectLineConnector = {
     }, (res) => {
       var body = '';
       res.on('data', function (chunk) { body += chunk; });
-      res.on('end', function () { console.log(body); });
+      res.on('end', function () { });
     });
   }
 };

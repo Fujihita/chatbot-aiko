@@ -86,7 +86,7 @@ core.dialog.matches('Goodbye', function (session) {
   }
 });
 core.dialog.matches('GetInfo', function (session) {
-  WikiaChatConnector.send('I\'m a chat bot created by Kantai Collection English Wikia');
+  WikiaChatConnector.send('I\'m a chat bot created by Fujihita at Kantai Collection English Wikia');
   WikiaChatConnector.send('As for my logs, they are at: http://fujihita.azurewebsites.net/');
 });
 
