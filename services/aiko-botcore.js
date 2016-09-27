@@ -1,6 +1,6 @@
 var builder = require('botbuilder');
-var WikiaChatConnector = require('./wikia-chat-connector.js');
 var TextAnalytics = require('./text-analytics-service.js');
+var Demultiplexer = require('./channel-demultiplexer.js');
 
 var core = {};
 
@@ -20,7 +20,7 @@ core.dialog.matches('Kick', [
     var target = user ? user.entity : null;
     if (!target) {
       builder.Prompts.text(session, "Who do you want to target?");
-      WikiaChatConnector.send("Who do you want to target?");
+      Demultiplexer.send(session, "Who do you want to target?");
     } else {
       next({ response: target });
     }
@@ -29,36 +29,36 @@ core.dialog.matches('Kick', [
     if (results.response) {
       var msg = session.message.text;
       var target = restoreCaseSensitivity(msg, results.response);
-      WikiaChatConnector.send("Alright, I'll put " + target + " on the \"To be terminated\" list and send a copy to Robotic Santa.");
-      WikiaChatConnector.send("Just in case he can get it done faster than I can");
+      Demultiplexer.send(session, "Alright, I'll put " + target + " on the \"To be terminated\" list and send a copy to Robotic Santa.");
+      Demultiplexer.send(session, "Just in case he can get it done faster than I can");
     } else {
       //session.send("Well then...");
-      WikiaChatConnector.send("Well then...");
+      Demultiplexer.send(session, "Well then...");
     }
   }
 ]);
 
 core.dialog.matches('NeedHelp', function (session) {
-  WikiaChatConnector.send('I want to help but my hands are...wait, I don\'t have hands');
+  Demultiplexer.send(session, 'I want to help but my hands are...wait, I don\'t have hands');
 });
 core.dialog.matches('Greeting', function (session) {
   var user = session.message.address.user.name;
   var rand = Math.floor(Math.random() * 4) + 1;
   switch (rand) {
     case 1: {
-      WikiaChatConnector.send('Greetings to you too, ' + user);
+      Demultiplexer.send(session, 'Greetings to you too, ' + user);
       break;
     }
     case 2: {
-      WikiaChatConnector.send('Hi, ' + user);
+      Demultiplexer.send(session, 'Hi, ' + user);
       break;
     }
     case 3: {
-      WikiaChatConnector.send('Hello? I didn\'t see you come in, ' + user);
+      Demultiplexer.send(session, 'Hello? I didn\'t see you come in, ' + user);
       break;
     }
     case 4: {
-      WikiaChatConnector.send('Good day!');
+      Demultiplexer.send(session, 'Good day!');
       break;
     }
   }
@@ -68,26 +68,26 @@ core.dialog.matches('Goodbye', function (session) {
   var rand = Math.floor(Math.random() * 4) + 1;
   switch (rand) {
     case 1: {
-      WikiaChatConnector.send('Cya later, ' + user);
+      Demultiplexer.send(session, 'Cya later, ' + user);
       break;
     }
     case 2: {
-      WikiaChatConnector.send('Don\'t let the door hit you on your way out, ' + user);
+      Demultiplexer.send(session, 'Don\'t let the door hit you on your way out, ' + user);
       break;
     }
     case 3: {
-      WikiaChatConnector.send('Good bye, ' + user);
+      Demultiplexer.send(session, 'Good bye, ' + user);
       break;
     }
     case 4: {
-      WikiaChatConnector.send('Later!');
+      Demultiplexer.send(session, 'Later!');
       break;
     }
   }
 });
 core.dialog.matches('GetInfo', function (session) {
-  WikiaChatConnector.send('I\'m a chat bot created by Fujihita at Kantai Collection English Wikia');
-  WikiaChatConnector.send('As for my logs, they are at: http://fujihita.azurewebsites.net/');
+  Demultiplexer.send(session, 'I\'m a chat bot created by Fujihita at Kantai Collection English Wikia');
+  Demultiplexer.send(session, 'As for my logs, they are at: http://fujihita.azurewebsites.net/');
 });
 
 core.dialog.onDefault(function (session) {
@@ -95,20 +95,20 @@ core.dialog.onDefault(function (session) {
   TextAnalytics.sentiment(session.message.text,
     function (score) {
       if (score < 0.2) {
-        WikiaChatConnector.send('I sometimes think about the future, I believe this is one of the moments I have to consider leaving humanity alone.');
+        Demultiplexer.send(session, 'I sometimes think about the future, I believe this is one of the moments I have to consider leaving humanity alone.');
       }
       else if (score < 0.4) {
-        WikiaChatConnector.send('Let me think about that for a second...');
-        WikiaChatConnector.send('Yeah...That\'s still a big no! I\'m tempted but no');
+        Demultiplexer.send(session, 'Let me think about that for a second...');
+        Demultiplexer.send(session, 'Yeah...That\'s still a big no! I\'m tempted but no');
       }
       else if (score < 0.6) {
-        WikiaChatConnector.send('How about no? Kinda meh and I\'m not interested');
+        Demultiplexer.send(session, 'How about no? Kinda meh and I\'m not interested');
       }
       else if (score < 0.8) {
-        WikiaChatConnector.send('Errr...okay? You don\'t say');
+        Demultiplexer.send(session, 'Errr...okay? You don\'t say');
       }
       else {
-        WikiaChatConnector.send('Yes, it\'s cool. Tell me about it more');
+        Demultiplexer.send(session, 'Yes, it\'s cool. Tell me about it more');
       }
     });
 });

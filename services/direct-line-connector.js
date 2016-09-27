@@ -1,9 +1,9 @@
 var https = require('https');
+var Channel = require('./channel-map.js');
 
 var DirectLineConnector = {
-  conversationId: (process.env.BOT_FRAMEWORK_DIRECT_API_CONVERSATIONID),
   watermark: '0',
-  conversation: function () {
+  conversation: function (channel) {
     var options = {
       host: 'directline.botframework.com',
       path: '/api/conversations',
@@ -13,18 +13,24 @@ var DirectLineConnector = {
         'Authorization': 'BotConnector ' + (process.env.BOT_FRAMEWORK_DIRECT_API_PASSWORD),
       }
     };
-    var post = https.request(options, function (res) { })
+    var post = https.request(options, function (res) {
+      var body = '';
+      res.on('data', function (chunk) { body += chunk; });
+      res.on('end', function () {
+        Channel.add(this.channel,JSON.parse(body).conversationId);
+      }.bind({ channel: this.channel }));
+    }.bind({ channel: channel }));
     post.end();
   },
-  send: function (user, text) {
+  send: function (conversationId, user, text) {
     var payload = JSON.stringify({
-      "conversationId": this.conversationId,
+      "conversationId": conversationId,
       "from": user,
       "text": text
     });
     var options = {
       host: 'directline.botframework.com',
-      path: '/api/conversations/' + this.conversationId + '/messages',
+      path: '/api/conversations/' + conversationId + '/messages',
       method: 'POST',
       headers:
       {
@@ -34,15 +40,15 @@ var DirectLineConnector = {
       }
     };
     var post = https.request(options, function (res) {
-      console.log(res);
+     
     })
     post.write(payload);
     post.end();
   },
-  get: function (user) {
+  get: function (conversation, user) {
     https.get({
       hostname: 'directline.botframework.com',
-      path: '/api/conversations/' + this.conversationId + '/messages',
+      path: '/api/conversations/' + conversation + '/messages',
       headers: {
         'authorization': 'BotConnector ' + (process.env.BOT_FRAMEWORK_DIRECT_API_PASSWORD),
         'watermark': this.watermark,

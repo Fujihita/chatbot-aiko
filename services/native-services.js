@@ -1,10 +1,8 @@
 var DirectLineConnector = require('./direct-line-connector.js');
-
+var ChannelMap = require('./channel-map.js');
 var Native = {};
+Native.ShipVoice = require('./kancolle/ShipVoice.js');
 
-Native.ShipVoice = require('./resources/kancolle/ShipVoice.js');
-
-Native.roleId = 21;
 Native.dice = function (msg) {
   if (/ \d*d\d+\b/i.test(msg)) {
     var xd = msg.match(/ \d*d/i)[0];
@@ -34,27 +32,20 @@ Native.echo = function (msg) {
   }
 };
 
-Native.OnDefault = function (name, msg) {
-  var str = msg.replace(/[, ]+@?Aiko$/, "");
-  str = str.replace(/^@?Aiko[, ]+/, "")
-  DirectLineConnector.send(chat.name, str);
-  return null;
-};
-
-Native.poke = function ()
+Native.poke = function (conversationId)
 {
-  var linesArr = this.ShipVoice[this.roleId].lines;
+  var linesArr = this.ShipVoice[ChannelMap.getRole(conversationId)].lines;
     return linesArr[(Math.floor(Math.random() * linesArr.length) + 1)-1];
 };
 
-Native.showRole = function ()
+Native.showRole = function (conversationId)
 {
-    return "I am " + this.ShipVoice[this.roleId].name;
+    return "I am " + this.ShipVoice[ChannelMap.getRole(conversationId)].name;
 };
 
-Native.roleplayRandom = function()
+Native.roleplayRandom = function(conversationId)
 {
-    Native.roleId = (Math.floor(Math.random() * this.ShipVoice.length) + 1)-1;
+    ChannelMap.setRole(conversationId, (Math.floor(Math.random() * this.ShipVoice.length) + 1)-1);
     return "Guess who I am now!"
 };
 
@@ -62,14 +53,14 @@ Native.match = function (chat) {
   if (chat.text == "ping") {
     return "pong";
   }
-  if (chat.text == "\/me pokes Aiko") {
-    return this.poke();
+  if ((chat.text == "\/me pokes Aiko")|| (chat.text == "_pokes Aiko_")) {
+    return this.poke(chat.conversationId);
   }
    if (chat.text == "Aiko, play a new role") {
-    return this.roleplayRandom();
+    return this.roleplayRandom(chat.conversationId);
   }
    if (chat.text == "Aiko, show your role") {
-    return this.showRole();
+    return this.showRole(chat.conversationId);
   }
   if (/Aiko[?!]+/i.test(chat.text)) {
     return "Yes?";
@@ -81,11 +72,18 @@ Native.match = function (chat) {
     else if (/rolls?/i.test(chat.text)) {
       return this.dice(chat.text);
     }
-    // pass message to Bot Framework API
     else {
-      return this.OnDefault(chat.name, chat.text);
+      return this.OnDefault(chat);
     }
   }
+  return null;
+};
+
+Native.OnDefault = function (chat) {
+  var str = chat.text.replace(/[, ]+@?Aiko$/, "");
+  str = str.replace(/^@?Aiko[, ]+/, "")
+  DirectLineConnector.send(chat.conversationId, chat.name, str);
+  return null;
 };
 
 module.exports = Native;

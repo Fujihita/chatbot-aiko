@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var WikiaChatConnector = require('./wikia-chat-connector.js');
-var BotCore = require('./aiko-botcore.js');
+var WikiaChatConnector = require('./services/wikia-chat-connector.js');
+var BotCore = require('./services/aiko-botcore.js');
+var DiscordConnector = require('./services/discord-connector.js');
 
 router.use('/scripts', express.static(__dirname + '/scripts'));
 router.use('/resources', express.static(__dirname + '/resources'));
@@ -12,6 +13,12 @@ router.get('/', function (req, res) {
 });
 router.get('/log', function (req, res) {
   res.json(WikiaChatConnector.logger.log);
+});
+router.get('/furniture', function (req, res) {
+  res.sendfile('views/Grabber.html', { root: __dirname });
+});
+router.get('/poi', function (req, res) {
+  res.sendfile('views/Poidb2NodeInfo.html', { root: __dirname });
 });
 
 router.get('/api/stop', function (req, res) {
@@ -38,6 +45,7 @@ router.get('/api/status', function (req, res) {
 function startWikiaChatConnector() {
   try {
     WikiaChatConnector.load();
+    DiscordConnector.socket.connect();
   }
   catch (e) {
     console.log(e);
@@ -48,12 +56,14 @@ function stopWikiaChatConnector() {
   try {
     WikiaChatConnector.send("I'm off now...");
     WikiaChatConnector.disconnect();
+    DiscordConnector.socket.disconnect();
   }
   catch (e) {
     console.log(e);
   }
 }
 
+DiscordConnector.load();
 startWikiaChatConnector();
 
 module.exports = router;

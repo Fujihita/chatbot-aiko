@@ -33,6 +33,7 @@ var WikiaChatConnector =
           text: msg,
         }
       }));
+      //console.log(msg);
     },
     disconnect: function () {
       this.running = false;
@@ -50,7 +51,8 @@ WikiaChatConnector.logger = {
         timeStamp: new Date(data.attrs.timeStamp).toUTCString(),
         name: data.attrs.name,
         text: data.attrs.text,
-        avatar: data.attrs.avatarSrc.replace("down/28", "down/100")
+        avatar: data.attrs.avatarSrc.replace("down/28", "down/100"),
+        conversationId : (process.env.BOT_FRAMEWORK_DIRECT_API_CONVERSATIONID)
       };
       this.event(chat);
     }

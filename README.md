@@ -4,7 +4,7 @@
 This is a server-side chat bot written for Kantai Collection English Wikia chat room. The bot--named Aiko--uses MEAN stack (minus the database) app model, Bot Framework and other free Microsoft services.
 
 ## stats
-Version: 1.2.1
+Version: 1.3.9
 
 Project started: Thursday 22 September 2016
 
@@ -19,6 +19,7 @@ Live demo: http://fujihita.azurewebsites.net/
 * (Socket.io) Wikia Special:Chat integration.
 * (Bot Framework) Direct line API integration.
 * (Bot Framework) WebChat integration.
+* (Discord.io) Multi-channel [Discord](https://discordapp.com/) integration.
 * (LUIS API) Natural speech recognition.
 * (Text Analytics API) Sentiment analysis.
 
@@ -118,7 +119,22 @@ Set a few environment variables pertaining Wikia's chat, plus the name of the bo
 
 Change responses, add new lines and turn on/off services in ```aiko-botcore.js``` (Responses via Bot Framework and LUIS) and ```native-services.js``` (Local services in javascript).
 
-By default, Aiko only responds to "ping" and messages with "Aiko" cue (case-insensitive) at the start or end of message and only sends responses to WikiaChatConnector. To send responses to other channels, include the corresponding modules.
+By default, Aiko only responds to "ping" and messages with "Aiko" cue (case-insensitive) at the start or end of message. She's configured to send a response back to the originating channel via a multiplexer-demultiplexer mechanism. All channels are tracked by Bot Framework Direct Line API's conversationId value. Aiko supports multi-channel bot service for Discord but she requires a ping to register the channel into her channel map.
+
+A list of available native commands are:
+* ping: reply with a "pong"
+* Aiko, says "something": echo service
+* Aiko, rolls 3d69: Dice roller, support d20 and 1d20 formatting.
+* Aiko, play a new role: start Kantai Collection's "Guess a ship girl game".
+* /me pokes Aiko: poke Aiko to hear a random voice line from the girl she's roleplaying as.
+* Aiko, show your role: reveal her hidden role.
+
+Some online services that support natural language commands are:
+* Kick: a simple message with the name of the target user. It can be configured into an actual action with elevated permission.
+* Help: not yet implemented web query service.
+* GetInfo: a bit information about herself.
+* Greeting: say hello or hi to Aiko.
+* Goodbye: bid her farewell.
 
 # Limitations
 
