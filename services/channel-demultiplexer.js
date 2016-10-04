@@ -8,12 +8,7 @@ Demultiplexer.send = function(session, msg){
     var conversationId = JSON.stringify(session.message.address.conversation.id);
     var channel = ChannelMap.get(conversationId);
     try{
-    if (channel.type === null)
-    {
-        console.log("NULL");
-        session.send(msg);
-    }
-    else if (channel.type == 'discord')
+    if (channel.type == 'discord')
     {
         DiscordConnector.send(channel.id, msg);
     }
@@ -24,7 +19,8 @@ Demultiplexer.send = function(session, msg){
     }
     catch(e)
     {
-        console.log(e);
+        console.log("NULL");
+        session.send(msg);
     }
     console.log("Message: " + msg);
     console.log("To: " + conversationId);

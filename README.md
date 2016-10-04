@@ -4,7 +4,7 @@
 This is a server-side chat bot written for Kantai Collection English Wikia chat room. The bot--named Aiko--uses MEAN stack (minus the database) app model, Bot Framework and other free Microsoft services.
 
 ## stats
-Version: 1.3.9
+Version: 1.3.11
 
 Project started: Thursday 22 September 2016
 
@@ -33,8 +33,17 @@ npm install express --save
 ```
 npm install botbuilder --save
 ```
+
+for Wikia Chat integration, install
+
 ```
 npm install socket.io-client --save
+```
+
+for Discord integration, install
+
+```
+npm install discord.io --save
 ```
 
 ## Microsoft Bot Framework
@@ -65,18 +74,10 @@ Save the conversation id to an environment variable:
 ```
 
 ## LUIS API
-[Register an create a LUIS app](https://www.luis.ai). To use the current functionalities, the LUIS app must have:
-The following intents:
-* Kick
-* NeedHelp
-* GetInfo
-* Greeting
-* Goodbye
+[Register an create a LUIS app](https://www.luis.ai). 
 
-The following entities:
-* User::Target
-
-Train and publish the app then set its app API to the environment variable 
+Train a set of intents to match the supported language commands (listed below) and publish an app.
+Set its app API to the environment variable 
 
 ```javascript
 "env": {
@@ -115,6 +116,19 @@ Set a few environment variables pertaining Wikia's chat, plus the name of the bo
 }
 ```
 
+## Discord
+
+[Create an app here](https://discordapp.com/developers/applications/me), after the sign up, go to the app's setting and create an associated bot account for it. Get the bot's Name and App Token and set them in two environment variables:
+
+```javascript
+"env": {
+                "DISCORD_BOT_NAME": "Aiko",
+                "DISCORD_APP_TOKEN": "{Discord app token}"
+}
+```
+
+Then follow the instruction [here](https://discordapp.com/developers/docs/topics/oauth2) to authorize Aiko access to Discord channels.
+
 ## Responses & Services Configuration
 
 Change responses, add new lines and turn on/off services in ```aiko-botcore.js``` (Responses via Bot Framework and LUIS) and ```native-services.js``` (Local services in javascript).
@@ -133,8 +147,12 @@ Some online services that support natural language commands are:
 * Kick: a simple message with the name of the target user. It can be configured into an actual action with elevated permission.
 * Help: not yet implemented web query service.
 * GetInfo: a bit information about herself.
-* Greeting: say hello or hi to Aiko.
-* Goodbye: bid her farewell.
+* Greeting: say hello to Aiko.
+* Teaching: teach Aiko something new and get a thank you back.
+* Thanking: say thank to Aiko.
+* Query: ask a yes/no question.
+* Lookup: Wikipedia lookup service.
+* Goodbye: bid Aiko farewell.
 
 # Limitations
 
@@ -143,3 +161,4 @@ Some online services that support natural language commands are:
 * Azure free hosting has a 24 minute idle timeout. After 24 minutes without any activity, the app will be reset. This can be mitigated by using a second web app with ```heartBeat()``` function in ```server.js``` (the two apps ping each other every 10 minutes to avoid idle timeout)
 * Azure free web apps also have a variety of daily CPU time, I/O, Memory, etc. quotas.
 * Due to privacy concerns, Aiko is configured to store only 300 latest chat entries. This setting can be changed or removed in ```WikiaChatConnector.logger.add()``` function.
+* New Discord channels will need to ping Aiko once in order for her to map the channelID in her multiplexer map.
