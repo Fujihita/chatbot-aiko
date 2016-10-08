@@ -15,17 +15,16 @@ var DiscordConnector = {
     },
 
     subscribe: function () {
-        this.socket.on('ready', function () { console.log(this.username + " - (" + this.id + ")"); });
         this.socket.on('message', this.multiplex);
     },
 
-    multiplex: function (user, userID, channelID, message, event) {
+    multiplex: function (user, userID, channelID, message) {
         var conversationId = ChannelMap.getConversation({ type: 'discord', id: channelID });
         if (conversationId === null) {
             DirectLineConnector.conversation({ type: 'discord', id: channelID });
         }
         else {
-            if (user != (process.env.DISCORD_BOT_NAME)) {
+            if (user !== (process.env.DISCORD_BOT_NAME)) {
                 var chat = {
                     timeStamp: new Date().toUTCString(),
                     name: user,
@@ -49,9 +48,3 @@ var DiscordConnector = {
 };
 
 module.exports = DiscordConnector;
-
-
-/*function(){
-                id = Channel.getConversation(this.channelID);
-                console.log('Discord null feedback id: ' + id);
-            }.bind({channelID: channelID, user:user, message:message, event:event}*/

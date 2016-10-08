@@ -17,8 +17,8 @@ core.bot.dialog('/', core.dialog);
 
 core.dialog.matches('Kick', [
   function (session, args, next) {
-    var user = builder.EntityRecognizer.findEntity(args.entities, 'Users::Target');
-    var target = user ? user.entity : null;
+    var target = builder.EntityRecognizer.findEntity(args.entities, 'Users::Target');
+    target = target ? target.entity : null;
 
     var self = builder.EntityRecognizer.findEntity(args.entities, 'Users::Self');
     self = self ? self.entity : null;
@@ -134,7 +134,6 @@ core.dialog.matches('Teaching', function (session) {
 });
 
 core.dialog.matches('Query', function (session) {
-    var user = session.message.address.user.name;
   var responses = [
     'I don\'t know...Yes, maybe? No, maybe?',
     'Yes, but don\'t take my word for it',
@@ -169,7 +168,7 @@ core.dialog.onDefault(function (session) {
 });
 
 function restoreCaseSensitivity(msg, insensitive_msg) {
-  sensitive_msg = msg.match(RegExp(insensitive_msg, 'i'));
+  var sensitive_msg = msg.match(RegExp(insensitive_msg, 'i'));
   if (sensitive_msg !== undefined) {
     return sensitive_msg[0];
   }

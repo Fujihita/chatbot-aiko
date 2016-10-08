@@ -10,7 +10,7 @@ Native.dice = function (msg) {
     if (xd == 0) {
       xd = 1;
     }
-    dy = msg.match(/d\d+\b/i)[0];
+    var dy = msg.match(/d\d+\b/i)[0];
     dy = dy.substring(1, dy.length);
     var rand = Math.floor(Math.random() * xd * dy) + 1;
     return rand.toString();
@@ -50,16 +50,16 @@ Native.roleplayRandom = function(conversationId)
 };
 
 Native.match = function (chat) {
-  if (chat.text == "ping") {
+  if (chat.text === "ping") {
     return "pong";
   }
-  if ((chat.text == "\/me pokes Aiko")|| (chat.text == "_pokes Aiko_")) {
+  if ((chat.text === "\/me pokes Aiko")|| (chat.text === "_pokes Aiko_")) {
     return this.poke(chat.conversationId);
   }
-   if (chat.text == "Aiko, play a new role") {
+   if (chat.text === "Aiko, play a new role") {
     return this.roleplayRandom(chat.conversationId);
   }
-   if (chat.text == "Aiko, show your role") {
+   if (chat.text === "Aiko, show your role") {
     return this.showRole(chat.conversationId);
   }
   if (/Aiko[?!]+/i.test(chat.text)) {

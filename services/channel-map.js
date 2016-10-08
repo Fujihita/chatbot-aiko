@@ -12,8 +12,8 @@ var channels = {
     }],
     getConversation: function (channel) {
         var i = null;
-        this.list.forEach(function (item, index) {
-            if (JSON.stringify(item.channel) == JSON.stringify(channel)) {
+        this.list.forEach(function (item) {
+            if (JSON.stringify(item.channel) === JSON.stringify(channel)) {
                 i = item.conversation;
             }
         });
@@ -22,8 +22,8 @@ var channels = {
 
     get: function (conversationId) {
         var i = null;
-        this.list.forEach(function (item, index) {
-            if (JSON.stringify(item.conversation) == conversationId) {
+        this.list.forEach(function (item) {
+            if (JSON.stringify(item.conversation) === conversationId) {
                 i = item.channel;
             }
         });
@@ -31,16 +31,16 @@ var channels = {
     },
     getRole: function (conversationId) {
         var role = 21;
-        this.list.forEach(function (item, index) {
-            if (item.conversation == conversationId) {
+        this.list.forEach(function (item) {
+            if (item.conversation === conversationId) {
                 role = item.role;
             }
         });
-        return role;i
+        return role;
     },
     setRole: function (conversationId, role) {
-        this.list.forEach(function (item, index) {
-            if (item.conversation == conversationId) {
+        this.list.forEach(function (item) {
+            if (item.conversation === conversationId) {
                 item.role = role;
             }
         });

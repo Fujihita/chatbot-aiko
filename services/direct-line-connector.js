@@ -39,13 +39,13 @@ var DirectLineConnector = {
         'Content-Length': Buffer.byteLength(payload)
       }
     };
-    var post = https.request(options, function (res) {
+    var post = https.request(options, function () {
      
     })
     post.write(payload);
     post.end();
   },
-  get: function (conversation, user) {
+  get: function (conversation) {
     https.get({
       hostname: 'directline.botframework.com',
       path: '/api/conversations/' + conversation + '/messages',

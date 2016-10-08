@@ -42,3 +42,7 @@ jspm_packages
 
 # Visual Studio Code debug launch file
 /.vscode
+
+# Sonarqube properties file
+sonar-project.properties
+/.sonar

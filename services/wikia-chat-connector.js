@@ -4,7 +4,7 @@ var WikiaChatConnector =
   {
     logger: '',
     running: false,
-    name: (process.env.BOT_NAME),
+    name: (process.env.WIKIA_BOT_NAME),
     socket: "",
     load: function () {
       socket = require('socket.io-client')((process.env.CHAT_HOST),
@@ -21,9 +21,9 @@ var WikiaChatConnector =
       this.running = true;
     },
     subscribe: function () {
-      socket.on('connect', function (msg) { this.running = true; });
-      socket.on('message', function (payload) { WikiaChatConnector.logger.parse(payload); });
-      socket.on('disconnect', function (msg) { this.running = false; });
+      socket.on('connect', function () { this.running = true;});
+      socket.on('message', function (payload) { WikiaChatConnector.logger.parse(payload);});
+      socket.on('disconnect', function () { this.running = false; });
     },
     send: function (msg) {
       socket.send(JSON.stringify({
@@ -33,7 +33,6 @@ var WikiaChatConnector =
           text: msg,
         }
       }));
-      //console.log(msg);
     },
     disconnect: function () {
       this.running = false;
@@ -45,19 +44,18 @@ WikiaChatConnector.logger = {
   log: [],
   parse: function (payload) {
     try {
-      data = JSON.parse(payload.data);
-      chat = {
+      var data = JSON.parse(payload.data);
+      var chat = {
         event: payload.event,
         timeStamp: new Date(data.attrs.timeStamp).toUTCString(),
         name: data.attrs.name,
         text: data.attrs.text,
         avatar: data.attrs.avatarSrc.replace("down/28", "down/100"),
-        conversationId : (process.env.BOT_FRAMEWORK_DIRECT_API_CONVERSATIONID)
+        conversationId: (process.env.BOT_FRAMEWORK_DIRECT_API_CONVERSATIONID)
       };
       this.event(chat);
     }
-    catch (err) {
-    }
+    catch (err) { }
   },
 
   event: function (chat) {
@@ -74,16 +72,17 @@ WikiaChatConnector.logger = {
         this.on_join(chat);
         break;
       }
+      default: {
+        break;
+      }
     }
   },
 
   on_message: function (chat) {
-    console.log('[' + chat.event + '] <' + chat.name + '> ' + chat.text);
     this.add(chat);
-    if (chat.name != this.name) {
+    if (chat.name !== this.name) {
       var res = Native.match(chat);
-      if (res !== null)
-      {
+      if (res !== null) {
         WikiaChatConnector.send(res);
       };
     }
@@ -91,13 +90,11 @@ WikiaChatConnector.logger = {
   on_logout: function (chat) {
     chat.timeStamp = new Date().toUTCString(),
       chat.text = chat.name + ' has left the chat';
-    console.log('[' + chat.event + '] <' + chat.name + '> ' + chat.text)
     this.add(chat);
   },
   on_join: function (chat) {
     chat.timeStamp = new Date().toUTCString();
     chat.text = chat.name + ' has joined the chat';
-    console.log('[' + chat.event + '] <' + chat.name + '> ' + chat.text)
     this.add(chat);
   },
   add: function (chat) {
@@ -105,7 +102,8 @@ WikiaChatConnector.logger = {
     this.log = this.keepLastElements(this.log, 300);
   },
   keepLastElements: function (arr, n) {
-    if (arr.length > n) arr.splice(0, arr.length - n);
+    if (arr.length > n)
+    arr.splice(0, arr.length - n);
     return arr;
   }
 };
