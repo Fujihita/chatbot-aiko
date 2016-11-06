@@ -1,6 +1,7 @@
 var builder = require('botbuilder');
 var TextAnalytics = require('./text-analytics-service.js');
 var Demultiplexer = require('./channel-demultiplexer.js');
+var WebSearch = require('./web-search-service.js');
 
 var core = {};
 
@@ -63,8 +64,14 @@ core.dialog.matches('Lookup', [
     if (results.response) {
       var msg = session.message.text;
       var topic = restoreCaseSensitivity(msg, results.response);
-      Demultiplexer.send(session, 'This function is not available yet. Buuuttt...just for debug purposes, you want me to lookup \"' + topic + '\", right?');
-    } else {
+      Demultiplexer.send(session, 'Looking up ' + topic + '...please wait');
+      WebSearch.lookup(topic,
+        function (snippet) {
+          console.log(snippet);
+          Demultiplexer.send(session, snippet);
+        });
+    }
+    else {
       Demultiplexer.send(session, "Well then...");
     }
   }
@@ -77,8 +84,7 @@ core.dialog.matches('NeedHelp', function (session) {
 
 
 core.dialog.matches('Greeting', function (session) {
-  var user = session.message.address.user.name;
-
+  var user = session.message.user.id;
   var responses = [
     'Greetings to you too, ' + user,
     'Hi, ' + user,
@@ -90,7 +96,7 @@ core.dialog.matches('Greeting', function (session) {
 
 
 core.dialog.matches('Goodbye', function (session) {
-  var user = session.message.address.user.name;
+  var user = session.message.user.id;
   var responses = [
     'Cya later, ' + user,
     'Don\'t let the door hit you on your way out, ' + user,
@@ -109,7 +115,7 @@ core.dialog.matches('GetInfo', function (session) {
 
 
 core.dialog.matches('Thanking', function (session) {
-    var user = session.message.address.user.name;
+  var user = session.message.user.id;
   var responses = [
     'You\'re very welcome, ' + user,
     'No problem!',
@@ -121,7 +127,7 @@ core.dialog.matches('Thanking', function (session) {
 
 
 core.dialog.matches('Teaching', function (session) {
-    var user = session.message.address.user.name;
+  var user = session.message.user.id;
   var responses = [
     'I see...thanks, ' + user,
     'Okay, noted! Anything else,' + user + '?',

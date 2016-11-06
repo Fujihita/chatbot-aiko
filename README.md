@@ -4,7 +4,7 @@
 This is a server-side chat bot written for Kantai Collection English Wikia chat room. The bot--named Aiko--uses MEAN stack (minus the database) app model, Bot Framework and other free Microsoft services.
 
 ## stats
-Version: 1.3.12
+Version: 1.4.2
 
 Project started: Thursday 22 September 2016
 
@@ -151,13 +151,14 @@ Some online services that support natural language commands are:
 * Teaching: teach Aiko something new and get a thank you back.
 * Thanking: say thank to Aiko.
 * Query: ask a yes/no question.
-* Lookup: Wikipedia lookup service.
+* Lookup: use Bing web search lookup service.
 * Goodbye: bid Aiko farewell.
 
 # Limitations
 
 * Free Text Analytics service has a monthly quota of 5000 queries.
 * Similarly, free LUIS app API has a monthly quota of 10000 queries.
+* Free Bing Web Search API has a monthly quota of 1000 queries.
 * Azure free hosting has a 24 minute idle timeout. After 24 minutes without any activity, the app will be reset. This can be mitigated by using a second web app with ```heartBeat()``` function in ```server.js``` (the two apps ping each other every 10 minutes to avoid idle timeout)
 * Azure free web apps also have a variety of daily CPU time, I/O, Memory, etc. quotas.
 * Due to privacy concerns, Aiko is configured to store only 300 latest chat entries. This setting can be changed or removed in ```WikiaChatConnector.logger.add()``` function.
