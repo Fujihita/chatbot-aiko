@@ -33,7 +33,10 @@ var DiscordConnector = {
                 };
                 var res = Native.match(chat);
                 if (res !== null) {
-                    DiscordConnector.send(channelID, res);
+                    if (res.constructor === Array)
+                        res.forEach(function (msg) { DiscordConnector.send(channelID, msg);});
+                    else
+                        DiscordConnector.send(channelID, res);
                 };
             }
         }

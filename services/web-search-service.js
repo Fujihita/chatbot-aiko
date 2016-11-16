@@ -1,7 +1,7 @@
 var https = require('https');
 var WebSearch = {};
 
-WebSearch.lookup = function(query, handler) {
+WebSearch.lookup = function (query, handler) {
     https.get({
         hostname: 'api.cognitive.microsoft.com',
         path: '/bing/v5.0/search?q=' + encodeURIComponent(query) + '&count=20&mkt=en-us&safesearch=Strict&responseFilter=WebPages',
@@ -11,8 +11,22 @@ WebSearch.lookup = function(query, handler) {
         }
     }, (res) => {
         var body = '';
-        res.on('data', function(chunk) { body += chunk; });
-        res.on('end', function() { findFeatureSnippet((JSON.parse(body)).webPages.value, handler); });
+        res.on('data', function (chunk) { body += chunk; });
+        res.on('end', function () {
+
+            if (typeof (JSON.parse(body).queryContext) != 'undefined')
+                handler("Yikes! Too lewd!");
+            else {
+                try {
+                    findFeatureSnippet((JSON.parse(body)).webPages.value, handler);
+                }
+                catch (err) {
+                    handler("I cannot find any result");
+                    console.log(err);
+                    console.log(body);
+                }
+            }
+            });
     });
 }
 
@@ -32,9 +46,9 @@ function domainFilter(result) {
         'en.wiktionary.org',
         'www.thefreedictionary.com',
         'www.dictionary.com',
-	'myanimelist.net',
-	'kancolle.wikia.com',
-	'merriam-webster.com'
+        'myanimelist.net',
+        'kancolle.wikia.com',
+        'merriam-webster.com'
     ];
     var domain = extractDomain(result.displayUrl);
     return (safeDomainList.indexOf(domain) > -1)

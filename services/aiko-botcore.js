@@ -88,7 +88,7 @@ core.dialog.matches('Greeting', function (session) {
   var responses = [
     'Greetings to you too, ' + user,
     'Hi, ' + user,
-    'Hello? I didn\'t see you come in, ' + user,
+    'Hello, ' + user,
     'Good day!'
   ];
   Demultiplexer.send(session, responses[core.randBetween(0, responses.length - 1)]);
@@ -162,7 +162,7 @@ core.dialog.onDefault(function (session) {
         Demultiplexer.send(session, 'Enough internet for today. I want off...oh wait, I can\'t');
       }
       else if (score < 0.6) {
-        Demultiplexer.send(session, 'Right! Poke me when you\'re done talking about this');
+        Demultiplexer.send(session, 'I see');
       }
       else if (score < 0.8) {
         Demultiplexer.send(session, 'Errr...that\'s alright? I guess?');

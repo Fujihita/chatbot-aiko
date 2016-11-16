@@ -1,6 +1,6 @@
 {
   "name": "wikichatbot",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "description": "Chat bot for Wiki's Special:Chat page hosted on Azure cloud",
   "main": "server.js",
   "scripts": {
