@@ -1,4 +1,5 @@
 var Native = require('./native-services.js');
+var WikiaLogin = require('./wikia-login.js');
 
 var WikiaChatConnector =
   {
@@ -6,36 +7,39 @@ var WikiaChatConnector =
     running: false,
     name: (process.env.WIKIA_BOT_NAME),
     socket: "",
+    login: function () {
+      WikiaLogin.login(WikiaChatConnector.load);
+    },
     load: function () {
       socket = require('socket.io-client')((process.env.CHAT_HOST),
         {
           query: {
-            name: this.name,
-            key: (process.env.CHAT_KEY),
+            name: WikiaChatConnector.name,
+            key: WikiaLogin.chatKey,
             serverId: (process.env.CHAT_SERVER_ID),
             wikiId: (process.env.CHAT_SERVER_ID),
             roomId: (process.env.CHAT_ROOM_ID)
           }
         });
-      this.subscribe();
-      this.running = true;
+      WikiaChatConnector.subscribe();
+      WikiaChatConnector.running = true;
     },
     subscribe: function () {
-      socket.on('connect', function () { this.running = true; });
+      socket.on('connect', function () { WikiaChatConnector.running = true; });
       socket.on('message', function (payload) { WikiaChatConnector.logger.parse(payload); });
-      socket.on('disconnect', function () { this.running = false; });
+      socket.on('disconnect', function () { WikiaChatConnector.running = false; });
     },
     send: function (msg) {
       socket.send(JSON.stringify({
         attrs: {
           msgType: "chat",
-          name: this.name,
+          name: WikiaChatConnector.name,
           text: msg,
         }
       }));
     },
     disconnect: function () {
-      this.running = false;
+      WikiaChatConnector.running = false;
       socket.disconnect();
     }
   };
@@ -84,9 +88,9 @@ WikiaChatConnector.logger = {
       var res = Native.match(chat);
       if (res !== null) {
         if (res.constructor === Array)
-        res.forEach(function (msg) {WikiaChatConnector.send(msg);});
+          res.forEach(function (msg) { WikiaChatConnector.send(msg); });
         else
-        WikiaChatConnector.send(res);
+          WikiaChatConnector.send(res);
       };
     }
   },

@@ -44,7 +44,7 @@ router.get('/api/status', function (req, res) {
 
 function startWikiaChatConnector() {
   try {
-    WikiaChatConnector.load();
+    WikiaChatConnector.login();
     DiscordConnector.socket.connect();
   }
   catch (e) {
