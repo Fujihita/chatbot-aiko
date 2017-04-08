@@ -1,9 +1,9 @@
 var https = require('https');
-var Channel = require('./channel-map.js');
+var registry = include('/services/config/registry.js');
 
 var DirectLineConnector = {
   watermark: '0',
-  conversation: function (channel) {
+  startConversation: function (channelID) {
     var options = {
       host: 'directline.botframework.com',
       path: '/api/conversations',
@@ -17,9 +17,25 @@ var DirectLineConnector = {
       var body = '';
       res.on('data', function (chunk) { body += chunk; });
       res.on('end', function () {
-        Channel.add(this.channel,JSON.parse(body).conversationId);
-      }.bind({ channel: this.channel }));
-    }.bind({ channel: channel }));
+        var id = JSON.parse(body).conversationId;
+        registry.index[this.channelID] = id;
+
+        registry[id] = {
+          type: "discord",
+          auth: {
+            name: (process.env.DISCORD_BOT_NAME),
+            token: (process.env.DISCORD_APP_TOKEN),
+            "channelID": this.channelID
+          },
+          services: {
+            ping: true,
+            recall: {},
+            roller: true
+          },
+          socket: ""
+        }
+      }.bind({ channelID: this.channelID }));
+    }.bind({ channelID: channelID }));
     post.end();
   },
   send: function (conversationId, user, text) {
@@ -28,6 +44,7 @@ var DirectLineConnector = {
       "from": user,
       "text": text
     });
+    console.log(payload);
     var options = {
       host: 'directline.botframework.com',
       path: '/api/conversations/' + conversationId + '/messages',
@@ -40,12 +57,16 @@ var DirectLineConnector = {
       }
     };
     var post = https.request(options, function (res) {
-     
+      var body = '';
+      res.on('data', function (chunk) { body += chunk; });
+      res.on('end', function () {
+        
+      })
     })
     post.write(payload);
     post.end();
   },
-  get: function (conversation, user) {
+  get: function (conversation) {
     https.get({
       hostname: 'directline.botframework.com',
       path: '/api/conversations/' + conversation + '/messages',
@@ -57,7 +78,7 @@ var DirectLineConnector = {
     }, (res) => {
       var body = '';
       res.on('data', function (chunk) { body += chunk; });
-      res.on('end', function () { });
+      res.on('end', function () { console.log(body); });
     });
   }
 };
