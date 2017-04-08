@@ -56,12 +56,17 @@ var DirectLineConnector = {
         'Content-Length': Buffer.byteLength(payload)
       }
     };
+<<<<<<< HEAD:services/web/direct-line-connector.js
     var post = https.request(options, function (res) {
       var body = '';
       res.on('data', function (chunk) { body += chunk; });
       res.on('end', function () {
         
       })
+=======
+    var post = https.request(options, function () {
+     
+>>>>>>> 3b61c693067f8666b4ff6bf1417ec34c7be73582:services/direct-line-connector.js
     })
     post.write(payload);
     post.end();

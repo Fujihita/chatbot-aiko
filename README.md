@@ -4,7 +4,7 @@
 This is a server-side chat bot written for Kantai Collection English Wikia chat room. The bot--named Aiko--uses MEAN stack (minus the database) app model, Bot Framework and other free Microsoft services.
 
 ## stats
-Version: 1.3.9
+Version: 1.5.1
 
 Project started: Thursday 22 September 2016
 
@@ -19,9 +19,10 @@ Live demo: http://fujihita.azurewebsites.net/
 * (Socket.io) Wikia Special:Chat integration.
 * (Bot Framework) Direct line API integration.
 * (Bot Framework) WebChat integration.
-* (Discord.io) Multi-channel [Discord](https://discordapp.com/) integration.
+* (Discord.io) Multi-tennant [Discord](https://discordapp.com/) integration.
 * (LUIS API) Natural speech recognition.
 * (Text Analytics API) Sentiment analysis.
+* (Bing Web Search API) Web search service.
 
 # build
 
@@ -33,8 +34,17 @@ npm install express --save
 ```
 npm install botbuilder --save
 ```
+
+for Wikia Chat integration, install
+
 ```
 npm install socket.io-client --save
+```
+
+for Discord integration, install
+
+```
+npm install discord.io --save
 ```
 
 ## Microsoft Bot Framework
@@ -65,18 +75,10 @@ Save the conversation id to an environment variable:
 ```
 
 ## LUIS API
-[Register an create a LUIS app](https://www.luis.ai). To use the current functionalities, the LUIS app must have:
-The following intents:
-* Kick
-* NeedHelp
-* GetInfo
-* Greeting
-* Goodbye
+[Register an create a LUIS app](https://www.luis.ai). 
 
-The following entities:
-* User::Target
-
-Train and publish the app then set its app API to the environment variable 
+Train a set of intents to match the supported language commands (listed below) and publish an app.
+Set its app API to the environment variable 
 
 ```javascript
 "env": {
@@ -94,52 +96,78 @@ For unscripted responses, Aiko uses [Text Analytics API](https://www.microsoft.c
 }
 ```
 
-## Wikia Special:Chat
-
-To integrate with Wikia's chat module, visit ```{HOST_WIKI}/wikia.php?controller=Chat&format=json```. Read from the response JSON the following:
-* "chatkey"
-* "roomId"
-
-The above page can be used for programmatically updating chatkey when it expires via a simple GET request.
-
-Getting "serverid" is a bit different. Use a browser such as Chrome, log in to chat and view the Querystring "serverId" from polling requests on Network tab
-
-Set a few environment variables pertaining Wikia's chat, plus the name of the bot:
+## Bing Search API
 
 ```javascript
 "env": {
-                "BOT_NAME": "Sasaki Aiko",
-                "CHAT_ROOM_ID": "{get your own room ID}",
-                "CHAT_SERVER_ID": "{get your own wiki server ID}",
-                "CHAT_KEY": "Chat::cookies::{hash string chat cookie}",
+                "WEB_SEARCH_API_KEY": "{MS Bing Web Search API key}"
 }
 ```
+
+## Wikia Special:Chat
+
+To integrate with Wikia's chat module, visit ```{HOST_WIKI}/wikia.php?controller=Chat&format=json```. Read from the response JSON the following:
+* "roomId"
+
+Getting "serverid" is a bit different. Use a browser such as Chrome, log in to chat and view the Querystring "serverId" from polling requests on Network tab
+
+Set a few environment variables pertaining Wikia's chat, plus the name of the bot and its wikia account password:
+
+```javascript
+"env": {
+                "WIKIA_BOT_NAME": "Sasaki Aiko",
+                "WIKIA_BOT_PASSWORD": "{password for wikia account}",
+                "CHAT_ROOM_ID": "{chat room id}",
+                "CHAT_SERVER_ID": "{chat server id}",
+                "WIKIA_HOST": "{address of wikia site}",
+}
+```
+
+## Discord
+
+[Create an app here](https://discordapp.com/developers/applications/me), after the sign up, go to the app's setting and create an associated bot account for it. Get the bot's Name and App Token and set them in two environment variables:
+
+```javascript
+"env": {
+                "DISCORD_BOT_NAME": "Aiko",
+                "DISCORD_APP_TOKEN": "{Discord app token}"
+}
+```
+
+Then follow the instruction [here](https://discordapp.com/developers/docs/topics/oauth2) to authorize Aiko access to Discord channels.
 
 ## Responses & Services Configuration
 
 Change responses, add new lines and turn on/off services in ```aiko-botcore.js``` (Responses via Bot Framework and LUIS) and ```native-services.js``` (Local services in javascript).
 
-By default, Aiko only responds to "ping" and messages with "Aiko" cue (case-insensitive) at the start or end of message. She's configured to send a response back to the originating channel via a multiplexer-demultiplexer mechanism. All channels are tracked by Bot Framework Direct Line API's conversationId value. Aiko supports multi-channel bot service for Discord but she requires a ping to register the channel into her channel map.
+By default, Aiko only responds to "ping" and messages with "@Aiko" cue (case-insensitive) at the start or end of message. She's configured to send a response back to the originating channel via a multiplexer-demultiplexer mechanism. All channels are tracked by Bot Framework Direct Line API's conversationId value. Aiko supports multi-channel bot service for Discord but she requires a ping to register the channel into her channel map.
 
 A list of available native commands are:
 * ping: reply with a "pong"
-* Aiko, says "something": echo service
-* Aiko, rolls 3d69: Dice roller, support d20 and 1d20 formatting.
-* Aiko, play a new role: start Kantai Collection's "Guess a ship girl game".
+* @Aiko, says "something": echo service
+* @Aiko, rolls 3d69: Dice roller, support d20 and 1d20 formatting.
+* @Aiko, play a new role: start Kantai Collection's "Guess a ship girl game".
 * /me pokes Aiko: poke Aiko to hear a random voice line from the girl she's roleplaying as.
-* Aiko, show your role: reveal her hidden role.
+* @Aiko, show your role: reveal her hidden role.
+* @Aiko, AS 2-5: air power reference service for Kantai Collection maps.
 
 Some online services that support natural language commands are:
 * Kick: a simple message with the name of the target user. It can be configured into an actual action with elevated permission.
 * Help: not yet implemented web query service.
 * GetInfo: a bit information about herself.
-* Greeting: say hello or hi to Aiko.
-* Goodbye: bid her farewell.
+* Greeting: say hello to Aiko.
+* Teaching: teach Aiko something new and get a thank you back.
+* Thanking: say thank to Aiko.
+* Query: ask a yes/no question.
+* Lookup: use Bing web search lookup service.
+* Goodbye: bid Aiko farewell.
 
 # Limitations
 
 * Free Text Analytics service has a monthly quota of 5000 queries.
 * Similarly, free LUIS app API has a monthly quota of 10000 queries.
+* Free Bing Web Search API has a monthly quota of 1000 queries.
 * Azure free hosting has a 24 minute idle timeout. After 24 minutes without any activity, the app will be reset. This can be mitigated by using a second web app with ```heartBeat()``` function in ```server.js``` (the two apps ping each other every 10 minutes to avoid idle timeout)
 * Azure free web apps also have a variety of daily CPU time, I/O, Memory, etc. quotas.
 * Due to privacy concerns, Aiko is configured to store only 300 latest chat entries. This setting can be changed or removed in ```WikiaChatConnector.logger.add()``` function.
+* New Discord channels will need to ping Aiko once in order for her to map the channelID in her multiplexer map.

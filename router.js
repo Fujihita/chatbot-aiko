@@ -94,6 +94,7 @@ router.get('/api/status', function (req, res) {
 
 function startWikiaChatConnector() {
   try {
+<<<<<<< HEAD
     for (var key in registry) {
       if (key != "index") {
         if ((registry.hasOwnProperty(key)) && (registry[key].type == 'wikichat')) {
@@ -106,6 +107,10 @@ function startWikiaChatConnector() {
     DiscordSocket = DiscordConnector();
     DiscordSocket.subscribe();
     running = true;
+=======
+    WikiaChatConnector.login();
+    DiscordConnector.socket.connect();
+>>>>>>> 3b61c693067f8666b4ff6bf1417ec34c7be73582
   }
   catch (e) {
     console.log(e);
