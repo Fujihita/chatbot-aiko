@@ -9,7 +9,6 @@ module.exports = function () {
         socket: new Discord.Client({
             token: (process.env.DISCORD_APP_TOKEN),
             autorun: true
-<<<<<<< HEAD
         }),
         subscribe: function () {
             var self = this;
@@ -52,36 +51,6 @@ module.exports = function () {
                     res.forEach(function (msg) { console.log(msg); socket.send(msg); });
                 else
                     socket.send(res);
-=======
-        });
-        this.subscribe();
-    },
-
-    subscribe: function () {
-        this.socket.on('message', this.multiplex);
-    },
-
-    multiplex: function (user, userID, channelID, message) {
-        var conversationId = ChannelMap.getConversation({ type: 'discord', id: channelID });
-        if (conversationId === null) {
-            DirectLineConnector.conversation({ type: 'discord', id: channelID });
-        }
-        else {
-            if (user !== (process.env.DISCORD_BOT_NAME)) {
-                var chat = {
-                    timeStamp: new Date().toUTCString(),
-                    name: user,
-                    text: message,
-                    'conversationId': conversationId
-                };
-                var res = Native.match(chat);
-                if (res !== null) {
-                    if (res.constructor === Array)
-                        res.forEach(function (msg) { DiscordConnector.send(channelID, msg);});
-                    else
-                        DiscordConnector.send(channelID, res);
-                };
->>>>>>> 3b61c693067f8666b4ff6bf1417ec34c7be73582
             }
             else if ((chat !== null) && (chat !== undefined)) {
                 if (((RegExp('^(' + (process.env.DISCORD_BOT_NAME) + '|<@' + process.env.DISCORD_BOT_ID + '>)[ ,:]', 'i')).test(chat.text))
@@ -107,10 +76,4 @@ module.exports = function () {
             this.socket.disconnect();
         }
     }
-<<<<<<< HEAD
 };
-=======
-};
-
-module.exports = DiscordConnector;
->>>>>>> 3b61c693067f8666b4ff6bf1417ec34c7be73582

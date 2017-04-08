@@ -4,7 +4,7 @@
 This is a server-side chat bot written for Kantai Collection English Wikia chat room. The bot--named Aiko--uses MEAN stack (minus the database) app model, Bot Framework and other free Microsoft services.
 
 ## stats
-Version: 1.5.1
+Version: 1.5.0
 
 Project started: Thursday 22 September 2016
 
@@ -107,19 +107,22 @@ For unscripted responses, Aiko uses [Text Analytics API](https://www.microsoft.c
 ## Wikia Special:Chat
 
 To integrate with Wikia's chat module, visit ```{HOST_WIKI}/wikia.php?controller=Chat&format=json```. Read from the response JSON the following:
+* "chatkey"
 * "roomId"
+
+The above page can be used for programmatically updating chatkey when it expires via a simple GET request.
 
 Getting "serverid" is a bit different. Use a browser such as Chrome, log in to chat and view the Querystring "serverId" from polling requests on Network tab
 
-Set a few environment variables pertaining Wikia's chat, plus the name of the bot and its wikia account password:
+Set a few environment variables pertaining Wikia's chat, plus the name of the bot:
 
 ```javascript
 "env": {
                 "WIKIA_BOT_NAME": "Sasaki Aiko",
-                "WIKIA_BOT_PASSWORD": "{password for wikia account}",
-                "CHAT_ROOM_ID": "{chat room id}",
-                "CHAT_SERVER_ID": "{chat server id}",
-                "WIKIA_HOST": "{address of wikia site}",
+                "CHAT_ROOM_ID": "{get your own room ID}",
+                "CHAT_SERVER_ID": "{get your own wiki server ID}",
+                "CHAT_KEY": "Chat::cookies::{hash string chat cookie}",
+                "WIKIA_HOST": "kancolle.wikia.com",
 }
 ```
 
