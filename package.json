@@ -4,7 +4,7 @@
   "description": "Chat bot for Wiki's Special:Chat page hosted on Azure cloud",
   "main": "server.js",
   "scripts": {
-    "test": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec --recursive"
+    "test": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && codecov"
   },
   "keywords": [
     "bot",
@@ -24,6 +24,7 @@
     "node": "4.4.7"
   },
   "devDependencies": {
+    "codecov": "^2.2.0",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.4.1",
     "should": "^11.2.1"
