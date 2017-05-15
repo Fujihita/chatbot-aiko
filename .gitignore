@@ -40,8 +40,9 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-/.vscode
+# VScode launch file
+.vscode
 
 # Sonarqube properties file
 sonar-project.properties
-/.sonar
+.sonar

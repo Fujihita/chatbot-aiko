@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var http = require('http');
-var _ = require('underscore')
 var WikiaChatConnector = require('./services/wikichat-connector.js');
 var WikiaChatLog = require('./services/wikichat-logger.js');
 var DiscordConnector = require('./services/discord-connector.js');
@@ -28,48 +27,6 @@ router.get('/furniture', function (req, res) {
 router.get('/poi', function (req, res) {
   res.sendfile('views/Poidb2NodeInfo.html', { root: __dirname });
 });
-
-/*
-router.get('/demo/stream.mp3', function (req, res) {
-  var id = (process.env.BOT_FRAMEWORK_DIRECT_API_CONVERSATIONID);
-  var role = registry[id].services.roleplay;
-  var roleplay = require("./services/local/kancolle-roleplay");
-  var adr = roleplay(id, { text: "/me pokes Aiko" })[1];
-  var response = res;
-
-  http.get({
-    hostname: '203.104.209.71',
-    path: adr.split('203.104.209.71')[1],
-    timeout: 500
-  }, function (audioFile) {
-    res.set(_.extend(_.pick(audioFile.headers, 'accept-ranges', 'content-type', 'content-length'), { 'Access-Control-Allow-Origin': '*' }));
-    res.shouldKeepAlive = false;
-
-    var Transform = require('stream').Transform;
-    var tx = new Transform();
-    tx._transform = function (chunk, encoding, callback) {
-      this.push(chunk);
-      callback();
-    }
-
-    tx._flush = function(callback){console.log("tx ended");};
-
-    audioFile.pipe(tx).pipe(res);
-
-    audioFile.on("end", function () {
-      console.log("server ended");
-    })
-
-    res.on("unpipe", function () {
-      console.log("client unpiped");
-    });
-
-    res.on("finish", function () {
-      console.log("client finished");
-    })
-  });
-});
-*/
 
 router.get('/api/stop', function (req, res) {
   stopWikiaChatConnector();
