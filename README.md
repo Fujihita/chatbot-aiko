@@ -5,6 +5,7 @@ This is a server-side chat bot written for Kantai Collection English Wikia chat 
 
 ## stats
 Version: 1.5.0
+[![Build Status](https://travis-ci.org/Fujihita/chatbot-aiko.svg?branch=master)](https://travis-ci.org/Fujihita/chatbot-aiko)
 
 Project started: Thursday 22 September 2016
 
