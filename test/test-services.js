@@ -12,7 +12,10 @@ describe('unit test service loader', function () {
         should(loader(chat)).be.exactly("pong");
     });
     it('should discard null request', function () {
-        should(loader()).be.exactly(null);
+        var chat = {
+
+        };
+        should(loader(chat)).be.exactly(null);
     });
 });
 describe('unit test ping service', function () {
@@ -32,7 +35,9 @@ describe('unit test ping service', function () {
 });
 describe('unit test recall service', function () {
     it('should discard null request', function () {
-        should(recall()).be.exactly(null);
+        var chat = {
+        };
+        should(recall(chat)).be.exactly(undefined);
     });
     it('should produce recall entry not found response', function () {
         var chat = {
@@ -62,7 +67,7 @@ describe('unit test dice roller service', function () {
     });
     it('should produce invalid ping response', function () {
         var chat = {
-            text: null
+
         };
         should(roller(chat)).be.exactly(undefined);
     });

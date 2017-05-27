@@ -4,7 +4,7 @@
 This is a server-side chat bot written for Kantai Collection English Wikia chat room. The bot--named Aiko--uses MEAN stack (minus the database) app model, Bot Framework and other free Microsoft services.
 
 ## stats
-Version: 1.5.0
+Version: 2.2.4
 
 [![Build Status](https://travis-ci.org/Fujihita/chatbot-aiko.svg?branch=master)](https://travis-ci.org/Fujihita/chatbot-aiko)
 [![codecov](https://codecov.io/gh/Fujihita/chatbot-aiko/branch/master/graph/badge.svg)](https://codecov.io/gh/Fujihita/chatbot-aiko)
@@ -14,6 +14,8 @@ Project started: Thursday 22 September 2016
 Project published: Monday 26 September 2016
 
 Live demo: http://fujihita.azurewebsites.net/
+
+## WARNING: OUT OF DATE DOCUMENT
 
 ### features
 * (AngularJs + Bootstrap) Chat log with flexible visual interface.
