@@ -14,3 +14,5 @@ var router = require('./router.js');
 
 app.use('/', router);
 server.listen(process.env.PORT || 1337);
+
+module.exports = server;

@@ -21,13 +21,6 @@ router.get('/', function (req, res) {
 router.get('/log', function (req, res) {
   res.json(WikiaChatLog.log);
 });
-router.get('/furniture', function (req, res) {
-  res.sendfile('views/Grabber.html', { root: __dirname });
-});
-router.get('/poi', function (req, res) {
-  res.sendfile('views/Poidb2NodeInfo.html', { root: __dirname });
-});
-
 router.get('/api/stop', function (req, res) {
   stopWikiaChatConnector();
   res.send('Sending Aiko to bed...');
@@ -90,6 +83,7 @@ function stopWikiaChatConnector() {
     console.log(e);
   }
 }
+
 
 require('./services/refresh-chat-key')();
 setTimeout(startWikiaChatConnector, 5000); // delay 5s for chatkeys acquisition
