@@ -39,12 +39,12 @@ router.get('/registry', function (req, res) {
 });
 
 router.get('/api/stop', function (req, res) {
-  stopWikiaChatConnector();
+  stopChatConnector();
   res.send('Sending Aiko to bed...');
 });
 
 router.get('/api/start', function (req, res) {
-  startWikiaChatConnector();
+  startChatConnector();
   res.send('Waking Aiko up...');
 });
 
