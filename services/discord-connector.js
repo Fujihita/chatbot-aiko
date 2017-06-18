@@ -66,7 +66,6 @@ module.exports = function () {
             }
         },
         send: function (message) {
-            //console.log(message);
             this.socket.sendMessage({
                 'to': this.channelID,
                 'message': message
@@ -74,6 +73,9 @@ module.exports = function () {
         },
         disconnect: function () {
             this.socket.disconnect();
+        },
+        connect: function () {
+            this.socket.connect();
         }
     }
 };

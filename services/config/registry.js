@@ -18,11 +18,13 @@ var channel = {
         roomId: (process.env.CHAT_ROOM_ID)
     },
     services: {
+        "service-manager": true,
         "settings": {
             "en": true, "jp": false, "voice": true
         },
         "ping": true,
-        "recall": {},
+        "recall": {
+        },
         "roller": true,
         "hourly": "./kancolle-hourlies.json",
         "roleplay": "Inazuma",

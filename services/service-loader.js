@@ -7,12 +7,14 @@ module.exports = function (chat) {
     var res = null;
 
     for (var key in registry[chat.id].services) {
-        var path = services[key];
-        if (path !== undefined) {
-            var module = require(path);
+        if (registry[chat.id].services[key] !== false) {
+            var path = services[key];
+            if (path !== undefined) {
+                var module = require(path);
                 var temp = module(chat);
-            if ((temp !== undefined) && (temp !== null))
-                res = temp;
+                if ((temp !== undefined) && (temp !== null))
+                    res = temp;
+            }
         }
     }
     return res;

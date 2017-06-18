@@ -1,8 +1,10 @@
 {
-    "ping" : "./local/ping",
+    "service-manager": "./service-manager",
+    "ping": "./local/ping",
     "roller": "./local/roller",
     "air-power": "./local/kancolle-air-power/kancolle-air-power",
     "roleplay": "./local/kancolle-roleplay/kancolle-roleplay",
     "recall": "./local/recall",
-    "settings": "./local/settings"
+    "settings": "./local/settings",
+    "wiki-link": "./local/wiki-link"
 }

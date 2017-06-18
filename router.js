@@ -3,11 +3,9 @@ var router = express.Router();
 var http = require('http');
 var WikiaChatConnector = require('./services/wikichat-connector.js');
 var WikiaChatLog = require('./services/wikichat-logger.js');
-var DiscordConnector = require('./services/discord-connector.js');
+var DiscordSocket = require('./services/discord-connector.js')();
 var BotCore = require('./services/web/aiko-botcore.js');
 var registry = require('./services/config/registry');
-
-var DiscordSocket = {};
 
 var running = false;
 
@@ -21,6 +19,25 @@ router.get('/', function (req, res) {
 router.get('/log', function (req, res) {
   res.json(WikiaChatLog.log);
 });
+
+router.get('/registry', function (req, res) {
+  var payload = {};
+  for (var key in registry) {
+    if (key != "index") {
+      if (registry.hasOwnProperty(key)) {
+        payload[key] = {};
+        payload[key].type = registry[key].type;
+        if (registry[key].type == 'wikichat')
+          payload[key].host = registry[key].auth.host;
+        else if (registry[key].type == 'discord')
+          payload[key].channelID = registry[key].auth.channelID;
+        payload[key].services = registry[key].services;
+      }
+    }
+  }
+  res.json(payload);
+});
+
 router.get('/api/stop', function (req, res) {
   stopWikiaChatConnector();
   res.send('Sending Aiko to bed...');
@@ -42,7 +59,7 @@ router.get('/api/status', function (req, res) {
   }
 });
 
-function startWikiaChatConnector() {
+function startChatConnector() {
   try {
     for (var key in registry) {
       if (key != "index") {
@@ -53,8 +70,7 @@ function startWikiaChatConnector() {
         }
       }
     }
-    DiscordSocket = DiscordConnector();
-    DiscordSocket.subscribe();
+    DiscordSocket.connect();
     running = true;
   }
   catch (e) {
@@ -62,7 +78,7 @@ function startWikiaChatConnector() {
   }
 }
 
-function stopWikiaChatConnector() {
+function stopChatConnector() {
   try {
     for (var key in registry) {
       if (key != "index") {
@@ -72,11 +88,13 @@ function stopWikiaChatConnector() {
           socket.disconnect();
         }
         else if (registry[key].type == 'discord') {
-          socket.send("I'm off now...");
+          var socket = registry[key].socket;
+          //socket.send("I'm off now...");
         }
       }
     }
-    DiscordSocket.disconnect();
+    if (running != false)
+      DiscordSocket.disconnect();
     running = false;
   }
   catch (e) {
@@ -84,12 +102,17 @@ function stopWikiaChatConnector() {
   }
 }
 
+DiscordSocket.subscribe();
 
-require('./services/refresh-chat-key')();
-setTimeout(startWikiaChatConnector, 5000); // delay 5s for chatkeys acquisition
-setInterval(require('./services/refresh-chat-key'), 60 * 60 * 1000);
-setInterval(startWikiaChatConnector, 60 * 60 * 1000);
+require('./services/refresh-chat-key')(startChatConnector);
+setInterval(function () { require('./services/refresh-chat-key')(startChatConnector); }, 60 * 60 * 1000);
+setInterval(require('./services/local/hourly/hourly'), 30000);
 
+module.exports = router;
+DiscordSocket.subscribe();
+
+require('./services/refresh-chat-key')(startChatConnector);
+setInterval(function () { require('./services/refresh-chat-key')(startChatConnector); }, 60 * 60 * 1000);
 setInterval(require('./services/local/hourly/hourly'), 30000);
 
 module.exports = router;

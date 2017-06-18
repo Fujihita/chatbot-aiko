@@ -28,6 +28,10 @@ var DirectLineConnector = {
             "channelID": this.channelID
           },
           services: {
+            "service-manager": true,
+            "settings": {
+              "en": true, "jp": false, "voice": true
+            },
             ping: true,
             recall: {},
             roller: true
@@ -60,7 +64,7 @@ var DirectLineConnector = {
       var body = '';
       res.on('data', function (chunk) { body += chunk; });
       res.on('end', function () {
-        
+
       })
     })
     post.write(payload);

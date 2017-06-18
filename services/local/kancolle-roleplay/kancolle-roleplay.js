@@ -13,6 +13,8 @@ module.exports = function (chat) {
                 return "I am " + role;
             else if (/ ?(play|change)( a)?( new)? role/i.test(chat.text))
                 return newRole(chat.id);
+            else if (/sets? role/i.test(chat.text))
+                return setRole(chat.id, chat.text);
             else return null
         }
 }
@@ -34,6 +36,20 @@ function newRole(id) {
     registry[id].services.roleplay = randomProperty(ship_voice);
     return "Guess who I am now!"
 };
+
+function setRole(id, msg) {
+    var str = msg.split(/sets? role/i)[1];
+    if (str !== undefined) {
+        str = str.trim();
+        if (ship_voice[str] != undefined) {
+            registry[id].services.roleplay = str;
+            return "I'm now " + str;
+        }
+        else
+            return "Are you sure " + str + " is real shipgirl?";
+    }
+    return null;
+}
 
 // http://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
 function randomProperty(obj) {
