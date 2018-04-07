@@ -15,13 +15,18 @@ WikiaLogin.login = function (conversationId, handler) {
     var cookie = res.headers['set-cookie'];
     res.on('data', function (chunk) { body += chunk; });
     res.on('end', function () {
-      loginToken(cookie, JSON.parse(body).login.token, conversationId, handler);
+      try {
+        loginToken(cookie, JSON.parse(body).login.token, conversationId, handler);
+      }
+      catch (err) {
+        console.log(err);
+      }
     });
   });
   post.end();
 }
 
-function loginToken (cookie, token, conversationId, handler) {
+function loginToken(cookie, token, conversationId, handler) {
   var name = registry[conversationId].auth.name;
   var password = registry[conversationId].auth.password;
   var options = {
@@ -29,9 +34,9 @@ function loginToken (cookie, token, conversationId, handler) {
     path: '/api.php?action=login&format=json&lgname=' + encodeURIComponent(name) + '&lgpassword=' + encodeURIComponent(password) + '&lgtoken=' + token,
     method: 'POST',
     headers:
-    {
-      'Cookie': cookie
-    }
+      {
+        'Cookie': cookie
+      }
   };
   var post = https.request(options, function (res) {
     var body = '';
@@ -48,15 +53,15 @@ function loginToken (cookie, token, conversationId, handler) {
 
 //http://kancolle.wikia.com/wikia.php?controller=Chat&format=json
 
-function getChatKey (cookie, conversationId, handler) {
+function getChatKey(cookie, conversationId, handler) {
   https.get({
     host: 'kancolle.wikia.com',
     path: '/wikia.php?controller=Chat&format=json',
     method: 'GET',
     headers:
-    {
-      'cookie': cookie
-    }
+      {
+        'cookie': cookie
+      }
   }, function (res) {
     var body = '';
     res.on('data', function (chunk) { body += chunk; });
@@ -64,8 +69,8 @@ function getChatKey (cookie, conversationId, handler) {
       console.log(JSON.parse(body).username);
       console.log(JSON.parse(body).chatkey);
       var chatkey = JSON.parse(body).chatkey;
-        registry[conversationId].auth.key = chatkey; // final handler writes back chatkey to registry.js
-        handler();
+      registry[conversationId].auth.key = chatkey; // final handler writes back chatkey to registry.js
+      handler();
     });
   });
 }

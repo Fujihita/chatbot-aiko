@@ -24,5 +24,12 @@
   },
   "engines": {
     "node": "6.10.0"
+  },
+  "devDependencies": {
+    "codecov": "^2.2.0",
+    "istanbul": "^1.1.0-alpha.1",
+    "mocha": "^3.4.1",
+    "should": "^11.2.1",
+    "supertest": "^3.0.0"
   }
 }
