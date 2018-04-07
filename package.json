@@ -1,10 +1,11 @@
 {
   "name": "wikichatbot",
-  "version": "1.5.0",
+  "version": "2.2.8",
+  "last_update": "2018-01-02T16:14:16.122Z",
   "description": "Chat bot for Wiki's Special:Chat page hosted on Azure cloud",
   "main": "server.js",
   "scripts": {
-    "test": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && codecov"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "bot",
@@ -15,19 +16,13 @@
   "author": "Fujihita@fujihita.wordpress.com",
   "license": "ISC",
   "dependencies": {
-    "botbuilder": "^3.2.3",
-    "discord.io": "^2.2.2",
-    "express": "^4.14.0",
-    "socket.io-client": "^1.4.8"
+    "botbuilder": "^3.9.0",
+    "discord.io": "github:woor/discord.io#gateway_v6",
+    "express": "^4.15.4",
+    "socket.io-client": "^2.0.3",
+    "underscore": "^1.8.3"
   },
   "engines": {
-    "node": "4.4.7"
-  },
-  "devDependencies": {
-    "codecov": "^2.2.0",
-    "istanbul": "^1.1.0-alpha.1",
-    "mocha": "^3.4.1",
-    "should": "^11.2.1",
-    "supertest": "^3.0.0"
+    "node": "6.10.0"
   }
 }

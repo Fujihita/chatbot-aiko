@@ -1,5 +1,6 @@
 var https = require('https');
 var registry = include('/services/config/registry.js');
+var preloader = include('/services/config/discord-preloader.js');
 
 var DirectLineConnector = {
   watermark: '0',
@@ -18,26 +19,7 @@ var DirectLineConnector = {
       res.on('data', function (chunk) { body += chunk; });
       res.on('end', function () {
         var id = JSON.parse(body).conversationId;
-        registry.index[this.channelID] = id;
-
-        registry[id] = {
-          type: "discord",
-          auth: {
-            name: (process.env.DISCORD_BOT_NAME),
-            token: (process.env.DISCORD_APP_TOKEN),
-            "channelID": this.channelID
-          },
-          services: {
-            "service-manager": true,
-            "settings": {
-              "en": true, "jp": false, "voice": true
-            },
-            ping: true,
-            recall: {},
-            roller: true
-          },
-          socket: ""
-        }
+        preloader(id, this.channelID);
       }.bind({ channelID: this.channelID }));
     }.bind({ channelID: channelID }));
     post.end();

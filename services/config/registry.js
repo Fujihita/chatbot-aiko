@@ -4,7 +4,7 @@ registry = {
     }
 };
 
-//load default wikichat channel
+/*load default wikichat channel
 conversationId = (process.env.BOT_FRAMEWORK_DIRECT_API_CONVERSATIONID)
 var channel = {
     type: "wikichat",
@@ -17,23 +17,13 @@ var channel = {
         wikiId: (process.env.CHAT_SERVER_ID),
         roomId: (process.env.CHAT_ROOM_ID)
     },
-    services: {
-        "service-manager": true,
-        "settings": {
-            "en": true, "jp": false, "voice": true
-        },
-        "ping": true,
-        "recall": {
-        },
-        "roller": true,
-        "hourly": "./kancolle-hourlies.json",
-        "roleplay": "Inazuma",
-        "air-power": true,
-    },
+    services: {},
     socket: ""
 };
 
 registry[conversationId] = channel;
+*/
+
 
 /*
 // Discord registry prototype
@@ -52,6 +42,23 @@ conversationId: {
     },
     socket: ""
 }
+
+ "service-manager": true,
+        "ping": true,
+        "recall": {
+        },
+        "roller": true,
+        "hourly": {
+            src: "./kancolle-hourlies.json",
+            timer: {}
+        },
+        "roleplay": {
+            ship: "Inazuma",
+            en: true,
+            jp: false,
+            voice: true
+        },
+        "air-power": true,
 */
 
 module.exports = registry;

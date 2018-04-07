@@ -22,6 +22,7 @@ module.exports = function () {
                         socket: self.socket,
                         disconnect: self.disconnect
                     };
+                    console.log(userID)
                     self.resolve(chat);
                 }
             });
@@ -65,11 +66,14 @@ module.exports = function () {
                 }
             }
         },
-        send: function (message) {
-            this.socket.sendMessage({
-                'to': this.channelID,
-                'message': message
-            });
+        send: function (payload) {
+            var data = {};
+            if(payload.constructor === "test".constructor)
+                data.message = payload;
+            else data = payload;
+            data.to = this.channelID;
+            console.log(data);
+            this.socket.sendMessage(data);
         },
         disconnect: function () {
             this.socket.disconnect();

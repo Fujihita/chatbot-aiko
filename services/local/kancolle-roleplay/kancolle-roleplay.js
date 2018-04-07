@@ -1,8 +1,23 @@
 var registry = include('/services/config/registry.js');
 var ship_voice = require('./kancolle-ship-voice.json');
 
-module.exports = function (chat) {
-    var role = registry[chat.id].services.roleplay;
+public = {}
+
+public.subscribe = function(config){
+    registry[config.id].services["roleplay"] = {
+            ship : "Inazuma",
+            en: true,
+            jp: false,
+            voice: true
+        };
+}
+
+public.unsubscribe = function(config){
+    delete registry[config.id].services["roleplay"];
+}
+
+public.execute = function (chat) {
+    var role = registry[chat.id].services.roleplay.ship;
     if (RegExp('^(\/me |_)pokes ' + (process.env.DISCORD_BOT_NAME) + '\.?_?$', 'i').test(chat.text)) {
         return poke(chat.id, role);
     }
@@ -23,17 +38,17 @@ function poke(id, role) {
     var lines = ship_voice[role].lines;
     var rand_id = randomProperty(lines);
     var res = [];
-    if (registry[id].services.settings.jp)
+    if (registry[id].services.roleplay.jp)
         res.push(lines[rand_id].jp);
-    if (registry[id].services.settings.en)
+    if (registry[id].services.roleplay.en)
         res.push(lines[rand_id].en);
-    if (registry[id].services.settings.voice)
+    if (registry[id].services.roleplay.voice)
         res.push(getFilePath(ship_voice[role].api_id, ship_voice[role].api_filename, rand_id));
     return res;
 };
 
 function newRole(id) {
-    registry[id].services.roleplay = randomProperty(ship_voice);
+    registry[id].services.roleplay.ship = randomProperty(ship_voice);
     return "Guess who I am now!"
 };
 
@@ -62,3 +77,5 @@ function getFilePath(api_id, api_filename, line_id) {
     var filename = 100000 + 17 * (api_id + 7) * keys[line_id - 1] % 99173
     return 'http://203.104.209.71/kcs/sound/kc' + api_filename + '/' + filename + '.mp3';
 }
+
+module.exports = public;

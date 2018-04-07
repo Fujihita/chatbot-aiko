@@ -1,0 +1,15 @@
+{
+    "type": "discord",
+    "auth": {
+      "name": "",
+      "token": "",
+      "channelID": ""
+    },
+    "services": {
+      "service-manager": true,
+      "ping": true,
+      "recall": {},
+      "roller": true
+    },
+    "socket": ""
+}

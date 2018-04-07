@@ -1,0 +1,62 @@
+{
+    "encounter": [
+        {
+            "name": "An unlikely encounter",
+            "description": "You face impossible odds",
+            "effect": "Roll a D20, succeed if the roll is higher than 16"
+        },
+        {
+            "name": "A chance encounter",
+            "description": "It's a fair game",
+            "effect": "Roll a D8, succeed if the roll is higher than 4"
+        }
+    ],
+    "equipment": [
+        {
+            "name": "Wooden mallet",
+            "description": "A fist-sized mallet made of wood",
+            "effect": "Damage: 4"
+        },
+        {
+            "name": "Wooden mallet",
+            "description": "A fist-sized mallet made of wood",
+            "effect": "Damage: 4"
+        },
+        {
+            "name": "Barrel-bottom buckler",
+            "description": "One man's barrel-bottom is another man's buckler",
+            "effect": "Spend an action to defend with the buckler, roll AC twice for all attacks and use the higher."
+        }
+    ],
+    "monster": [
+        {
+            "name": "Slime",
+            "description": "It's a slime...",
+            "effect": "Damage: 2, HP: 20"
+        },
+        {
+            "name": "Tentacles",
+            "description": "A big hot tentacle",
+            "effect": "Damage: 4. Inflict 1 corrosive damage for 3 turns against female characters on hit."
+        }
+    ],
+    "pain": [
+        {
+            "name": "Broken blade",
+            "description": "Your weapon is damaged",
+            "effect": "Weapon deals half damage until repaired."
+        },
+        {
+            "name": "Broken blade",
+            "description": "Your weapon is damaged",
+            "effect": "Weapon deals half damage until repaired."
+        }
+    ],
+    "reward": [
+        {
+            "name": "10 Gold",
+            "description": "Money makes the world goes round",
+            "effect": "Reward gold"
+        }
+    ]
+}

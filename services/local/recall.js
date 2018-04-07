@@ -1,6 +1,16 @@
 var registry = include('/services/config/registry.js');
 
-module.exports = function (chat) {
+public = {}
+
+public.subscribe = function(config){
+    registry[config.id].services["recall"] = {};
+}
+
+public.unsubscribe = function(config){
+    delete registry[config.id].services["recall"];
+}
+
+public.execute = function (chat) {
     if (((RegExp('^(' + (process.env.DISCORD_BOT_NAME) + '|<@' + process.env.DISCORD_BOT_ID + '>)[ ,:]', 'i')).test(chat.text))
         || (RegExp('[ ,](' + (process.env.DISCORD_BOT_NAME) + '|<@' + process.env.DISCORD_BOT_ID + '>)[\?]?$', 'i').test(chat.text))) {
         if (/recalls?/i.test(chat.text))
@@ -59,3 +69,5 @@ function swap(json) {
     }
     return ret;
 }
+
+module.exports = public

@@ -1,16 +1,17 @@
 var builder = require('botbuilder');
 var TextAnalytics = require('./text-analytics-service.js');
 var WebSearch = require('./web-search-service.js');
-
 var core = {};
 
 core.model = (process.env.LUIS_MODEL_API);
 core.recognizer = new builder.LuisRecognizer(core.model);
 core.dialog = new builder.IntentDialog({ recognizers: [core.recognizer] });
+
 core.connector = new builder.ChatConnector({
   appId: process.env.MICROSOFT_APP_ID,
   appPassword: process.env.MICROSOFT_APP_PASSWORD
 });
+
 core.bot = new builder.UniversalBot(core.connector);
 core.bot.dialog('/', core.dialog);
 
@@ -63,11 +64,12 @@ core.dialog.matches('Lookup', [
       var msg = session.message.text;
       var topic = restoreCaseSensitivity(msg, results.response);
       send(session, 'Looking up ' + topic + '...please wait');
-      WebSearch.lookup(topic,
+      send(session, 'I regret to inform you that search engine access has been revoked due to pricing inflation and I\'m unable to pay the rent');
+      /*WebSearch.lookup(topic,
         function (snippet) {
           console.log(snippet);
           send(session, snippet);
-        });
+        });*/
     }
     else {
       send(session, "Well then...");
@@ -142,22 +144,23 @@ core.dialog.matches('Query', function (session) {
     'I don\'t know...Yes, maybe? No, maybe?',
     'Yes, but don\'t take my word for it',
     'Since I have yet to be able to make such a decision...I\'ll take \"whatever you choose\"',
-    'Random answer: Yes. Please ask again when Fujihita finishes my wiki lookup',
+    'Random answer: Yes.',
     'I can\'t decide...No, probably?',
     'How about no?',
-    'That\'s a no, Watson!'
+    'That\'s a no.'
   ];
   send(session, responses[core.randBetween(0, responses.length - 1)]);
 });
 
 core.dialog.onDefault(function (session) {
-  TextAnalytics.sentiment(session.message.text,
-    function (score) {
+  var score = Math.random();
+  //TextAnalytics.sentiment(session.message.text,
+  //  function (score) {
       if (score < 0.2) {
-        send(session, 'So this is how Tay went rogue. Thanks for killing my faith in humanity');
+        send(session, 'I don\'t want to hear about this again');
       }
       else if (score < 0.4) {
-        send(session, 'Enough internet for today. I want off...oh wait, I can\'t');
+        send(session, 'Okay, fine.');
       }
       else if (score < 0.6) {
         send(session, 'I see');
@@ -168,7 +171,7 @@ core.dialog.onDefault(function (session) {
       else {
         send(session, 'Cool! Tell me about it more');
       }
-    });
+  //  });
 });
 
 function restoreCaseSensitivity(msg, insensitive_msg) {

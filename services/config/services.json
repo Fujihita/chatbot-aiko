@@ -1,10 +1,13 @@
 {
-    "service-manager": "./service-manager",
-    "ping": "./local/ping",
-    "roller": "./local/roller",
-    "air-power": "./local/kancolle-air-power/kancolle-air-power",
-    "roleplay": "./local/kancolle-roleplay/kancolle-roleplay",
-    "recall": "./local/recall",
-    "settings": "./local/settings",
-    "wiki-link": "./local/wiki-link"
+    "service-manager": "/services/service-manager",
+    "ping": "/services/local/ping",
+    "roller": "/services/local/roller",
+    "rpg": "/services/local/rpg/rpg",
+    "air-power": "/services/local/kancolle-air-power/kancolle-air-power",
+    "roleplay": "/services/local/kancolle-roleplay/kancolle-roleplay",
+    "recall": "/services/local/recall",
+    "wiki-link": "/services/local/wiki-link",
+    "hourly": "/services/local/hourly/hourly",
+    "twitter-feed": "/services/web/twitter-feed",
+    "help": "/services/help"
 }

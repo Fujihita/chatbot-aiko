@@ -1,6 +1,16 @@
 var registry = include('/services/config/registry.js');
 
-module.exports = function (chat) {
+public = {}
+
+public.subscribe = function(config){
+    registry[config.id].services["wiki-link"] = config.value;
+}
+
+public.unsubscribe = function(config){
+    delete registry[config.id].services["wiki-link"];
+}
+
+public.execute = function (chat) {
     if (/\[\[.+\]\]/.test(chat.text)) {
         return link(chat.id, chat.text);
     }
@@ -17,3 +27,5 @@ function link(id, msg) {
         return null;
     return result;
 }
+
+module.exports = public;

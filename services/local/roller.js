@@ -1,4 +1,16 @@
-module.exports = function (chat) {
+var registry = include('/services/config/registry.js');
+
+public = {};
+
+public.subscribe = function(config){
+    registry[config.id].services["roller"] = true;
+}
+
+public.unsubscribe = function(config){
+    delete registry[config.id].services["roller"];
+}
+
+public.execute = function (chat) {
     if (((RegExp('^(' + (process.env.DISCORD_BOT_NAME) + '|<@' + process.env.DISCORD_BOT_ID + '>)[ ,:]', 'i')).test(chat.text))
         || (RegExp('[ ,](' + (process.env.DISCORD_BOT_NAME) + '|<@' + process.env.DISCORD_BOT_ID + '>)[\?]?$', 'i').test(chat.text))) {
         if (/rolls?/i.test(chat.text))
@@ -34,3 +46,5 @@ function dice(msg) {
         return "There's no spoon...I mean valid dice";
     }
 };
+
+module.exports = public;

@@ -38,6 +38,13 @@ router.get('/registry', function (req, res) {
   res.json(payload);
 });
 
+router.get('/furniture', function (req, res) {
+  res.sendfile('views/Grabber.html', { root: __dirname });
+});
+router.get('/poi', function (req, res) {
+  res.sendfile('views/export-nodeinfo.html', { root: __dirname });
+});
+
 router.get('/api/stop', function (req, res) {
   stopChatConnector();
   res.send('Sending Aiko to bed...');
@@ -106,13 +113,5 @@ DiscordSocket.subscribe();
 
 require('./services/refresh-chat-key')(startChatConnector);
 setInterval(function () { require('./services/refresh-chat-key')(startChatConnector); }, 60 * 60 * 1000);
-setInterval(require('./services/local/hourly/hourly'), 30000);
-
-module.exports = router;
-DiscordSocket.subscribe();
-
-require('./services/refresh-chat-key')(startChatConnector);
-setInterval(function () { require('./services/refresh-chat-key')(startChatConnector); }, 60 * 60 * 1000);
-setInterval(require('./services/local/hourly/hourly'), 30000);
 
 module.exports = router;
